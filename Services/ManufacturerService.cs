@@ -34,7 +34,6 @@ namespace Gvz.Laboratory.ManufacturerService.Services
 
             await _producer.SendManufacturerToKafkaAsync(manufacturerDto, "add-manufacturer-topic");
 
-
             return manufacturerId;
         }
 
@@ -58,8 +57,13 @@ namespace Gvz.Laboratory.ManufacturerService.Services
 
             var manufacturerId = await _manufacturerRepository.UpdateManufacturerAsync(manufacturer);
 
-            //mapping
-            //send to kafka
+            ManufacturerDto manufacturerDto = new ManufacturerDto
+            {
+                Id = id,
+                ManufacturerName = manufacturerName
+            };
+
+            await _producer.SendManufacturerToKafkaAsync(manufacturerDto, "update-manufacturer-topic");
 
             return manufacturerId;
         }
@@ -67,6 +71,8 @@ namespace Gvz.Laboratory.ManufacturerService.Services
         public async Task DeleteManufacturersAsync(List<Guid> ids)
         {
             await _manufacturerRepository.DeleteManufacturersAsync(ids);
+
+            await _producer.SendManufacturerToKafkaAsync(ids, "delete-manufacturer-topic");
         }
     }
 }
