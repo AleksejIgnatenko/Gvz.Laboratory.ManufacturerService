@@ -34,6 +34,21 @@ namespace Gvz.Laboratory.ManufacturerService.Repositories
             return manufacturerEntity.Id;
         }
 
+        public async Task<List<ManufacturerModel>> GetManufacturersAsync()
+        {
+            var manufacturerEntities = await _context.Manufacturers
+                .AsNoTracking()
+                .OrderByDescending(m => m.DateCreate)
+                .ToListAsync();
+
+            var manufacturers = manufacturerEntities.Select(m => ManufacturerModel.Create(
+                m.Id, 
+                m.ManufacturerName, 
+                false).manufacturer).ToList();
+
+            return manufacturers;
+        }
+
         public async Task<(List<ManufacturerModel> manufacturers, int numberManufacturers)> GetManufacturersForPageAsync(int pageNumber)
         {
             var manufacturerEntities = await _context.Manufacturers

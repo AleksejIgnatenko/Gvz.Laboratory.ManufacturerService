@@ -24,6 +24,17 @@ namespace Gvz.Laboratory.ManufacturerService.Controllers
         }
 
         [HttpGet]
+        [Route("getManufacturersAsync")]
+        public async Task<ActionResult> GetManufacturersAsync()
+        {
+            var manufacturers = await _manufacturerService.GetManufacturersAsync();
+
+            var response = manufacturers.Select(m => new GetManufacturersResponse(m.Id, m.ManufacturerName)).ToList();
+
+            return Ok(response);
+        }
+
+        [HttpGet]
         public async Task<ActionResult> GetManufacturerForPageAsync(int pageNumber)
         {
             var (manufacturers, numberManufacturers) = await _manufacturerService.GetManufacturersForPageAsync(pageNumber);

@@ -2,11 +2,18 @@ using Confluent.Kafka;
 using Gvz.Laboratory.ManufacturerService;
 using Gvz.Laboratory.ManufacturerService.Abstractions;
 using Gvz.Laboratory.ManufacturerService.Kafka;
+using Gvz.Laboratory.ManufacturerService.Middleware;
 using Gvz.Laboratory.ManufacturerService.Repositories;
 using Gvz.Laboratory.ManufacturerService.Services;
 using Microsoft.EntityFrameworkCore;
+using Serilog;
 
 var builder = WebApplication.CreateBuilder(args);
+
+Log.Logger = new LoggerConfiguration()
+    .Enrich.FromLogContext()
+    .WriteTo.Console()
+    .CreateLogger();
 
 // Add services to the container.
 
@@ -42,10 +49,19 @@ var app = builder.Build();
 app.UseSwagger();
 app.UseSwaggerUI();
 
+app.UseMiddleware<ExceptionHandlerMiddleware>();
+
 app.UseHttpsRedirection();
 
 app.UseAuthorization();
 
 app.MapControllers();
+
+app.UseCors(x =>
+{
+    x.WithHeaders().AllowAnyHeader();
+    x.WithOrigins("http://localhost:3000");
+    x.WithMethods().AllowAnyMethod();
+});
 
 app.Run();

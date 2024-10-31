@@ -38,6 +38,11 @@ namespace Gvz.Laboratory.ManufacturerService.Services
             return manufacturerId;
         }
 
+        public async Task<List<ManufacturerModel>> GetManufacturersAsync()
+        {
+            return await _manufacturerRepository.GetManufacturersAsync();
+        }
+
         public async Task<(List<ManufacturerModel> manufacturers, int numberManufacturers)> GetManufacturersForPageAsync(int pageNumber)
         {
             return await _manufacturerRepository.GetManufacturersForPageAsync(pageNumber);

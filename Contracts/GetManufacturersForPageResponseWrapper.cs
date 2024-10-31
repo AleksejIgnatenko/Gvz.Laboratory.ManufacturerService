@@ -1,7 +1,7 @@
 ﻿namespace Gvz.Laboratory.ManufacturerService.Contracts
 {
     public record GetManufacturersForPageResponseWrapper(
-        List<GetManufacturersForPageResponse> Products,
+        List<GetManufacturersForPageResponse> Manufacturers,
         int numberManufacturers
         );
 }
