@@ -1,5 +1,6 @@
 ﻿using Gvz.Laboratory.ManufacturerService.Abstractions;
 using Gvz.Laboratory.ManufacturerService.Contracts;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace Gvz.Laboratory.ManufacturerService.Controllers
@@ -16,6 +17,7 @@ namespace Gvz.Laboratory.ManufacturerService.Controllers
         }
 
         [HttpPost]
+        [Authorize(Roles = "Admin,Manager,Worker")]
         public async Task<ActionResult> CreateManufacturerAsync([FromBody] CreateManufacturerRequest createManufacturerRequest)
         {
             var id = await _manufacturerService.CreateManufacturerAsync(Guid.NewGuid(),
@@ -24,6 +26,7 @@ namespace Gvz.Laboratory.ManufacturerService.Controllers
         }
 
         [HttpGet]
+        [Authorize]
         [Route("getManufacturersAsync")]
         public async Task<ActionResult> GetManufacturersAsync()
         {
@@ -35,6 +38,7 @@ namespace Gvz.Laboratory.ManufacturerService.Controllers
         }
 
         [HttpGet]
+        [Authorize]
         public async Task<ActionResult> GetManufacturerForPageAsync(int pageNumber)
         {
             var (manufacturers, numberManufacturers) = await _manufacturerService.GetManufacturersForPageAsync(pageNumber);
@@ -47,6 +51,7 @@ namespace Gvz.Laboratory.ManufacturerService.Controllers
         }
 
         [HttpPut("{id:guid}")]
+        [Authorize(Roles = "Admin,Manager,Worker")]
         public async Task<ActionResult> UpdateManufacturerAsync(Guid id, [FromBody] UpdateManufacturerRequest updateManufacturerRequest)
         {
             await _manufacturerService.UpdateManufacturerAsync(id, updateManufacturerRequest.ManufacturerName);
@@ -55,6 +60,7 @@ namespace Gvz.Laboratory.ManufacturerService.Controllers
         }
 
         [HttpDelete]
+        [Authorize(Roles = "Admin,Manager,Worker")]
         public async Task<ActionResult> DeleteManufacturerAsync([FromBody] List<Guid> ids)
         {
             if (ids == null || !ids.Any())
