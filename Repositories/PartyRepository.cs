@@ -58,11 +58,24 @@ namespace Gvz.Laboratory.ManufacturerService.Repositories
         public async Task<(List<PartyModel> parties, int numberParties)> GetManufacturerPartiesForPageAsync(Guid manufacturerId, int pageNumber)
         {
             var partyEntities = await _context.Parties
-                .AsNoTracking()
-                .Where(p => p.Manufacturer.Id == manufacturerId)
-                .Skip(pageNumber * 20)
-                .Take(20)
-                .ToListAsync();
+                    .AsNoTracking()
+                    .Where(p => p.Manufacturer.Id == manufacturerId)
+                    .Include(p => p.Manufacturer)
+                    .Skip(pageNumber * 20)
+                    .Take(20)
+                    .ToListAsync();
+
+            if (!partyEntities.Any() && pageNumber != 0)
+            {
+                pageNumber--;
+                partyEntities = await _context.Parties
+                    .AsNoTracking()
+                    .Where(p => p.Manufacturer.Id == manufacturerId)
+                    .Include(p => p.Manufacturer)
+                    .Skip(pageNumber * 20)
+                    .Take(20)
+                    .ToListAsync();
+            }
 
             var numberParties = await _context.Parties
                 .Where(p => p.Manufacturer.Id == manufacturerId)
