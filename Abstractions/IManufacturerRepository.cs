@@ -1,4 +1,5 @@
-﻿using Gvz.Laboratory.ManufacturerService.Models;
+﻿using Gvz.Laboratory.ManufacturerService.Entities;
+using Gvz.Laboratory.ManufacturerService.Models;
 
 namespace Gvz.Laboratory.ManufacturerService.Abstractions
 {
@@ -8,6 +9,7 @@ namespace Gvz.Laboratory.ManufacturerService.Abstractions
         Task DeleteManufacturersAsync(List<Guid> ids);
         Task<List<ManufacturerModel>> GetManufacturersAsync();
         Task<(List<ManufacturerModel> manufacturers, int numberManufacturers)> GetManufacturersForPageAsync(int pageNumber);
+        Task<ManufacturerEntity?> GetManufacturerEntityByIdAsync(Guid manufacturerId);
         Task<Guid> UpdateManufacturerAsync(ManufacturerModel manufacturer);
     }
 }

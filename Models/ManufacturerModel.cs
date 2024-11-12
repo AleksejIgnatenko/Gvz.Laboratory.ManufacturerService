@@ -14,6 +14,10 @@ namespace Gvz.Laboratory.ManufacturerService.Models
             ManufacturerName = manufacturerName;
         }
 
+        public ManufacturerModel()
+        {
+        }
+
         public static (Dictionary<string, string> errors, ManufacturerModel manufacturer) Create(Guid id, string manufacturerName, bool useValidation = true)
         {
             Dictionary<string, string> errors = new Dictionary<string, string>();

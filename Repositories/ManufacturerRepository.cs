@@ -34,6 +34,11 @@ namespace Gvz.Laboratory.ManufacturerService.Repositories
             return manufacturerEntity.Id;
         }
 
+        public async Task<ManufacturerEntity?> GetManufacturerEntityByIdAsync(Guid manufacturerId)
+        {
+            return await _context.Manufacturers.FirstOrDefaultAsync(m => m.Id == manufacturerId);
+        }
+
         public async Task<List<ManufacturerModel>> GetManufacturersAsync()
         {
             var manufacturerEntities = await _context.Manufacturers

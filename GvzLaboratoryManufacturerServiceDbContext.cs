@@ -6,6 +6,7 @@ namespace Gvz.Laboratory.ManufacturerService
     public class GvzLaboratoryManufacturerServiceDbContext : DbContext
     {
         public DbSet<ManufacturerEntity> Manufacturers { get; set; }
+        public DbSet<PartyEntity> Parties { get; set; }
 
         public GvzLaboratoryManufacturerServiceDbContext(DbContextOptions<GvzLaboratoryManufacturerServiceDbContext> options) : base(options)
         {

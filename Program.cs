@@ -62,12 +62,32 @@ builder.Services.AddDbContext<GvzLaboratoryManufacturerServiceDbContext>(options
 builder.Services.AddScoped<IManufacturerService, ManufacturerService>();
 builder.Services.AddScoped<IManufacturerRepository, ManufacturerRepository>();
 
+builder.Services.AddScoped<IPartyService, PartyService>();
+builder.Services.AddScoped<IPartyRepository, PartyRepository>();
+
 var config = new ProducerConfig
 {
     BootstrapServers = "kafka:29092"
 };
 builder.Services.AddSingleton<IProducer<Null, string>>(new ProducerBuilder<Null, string>(config).Build());
 builder.Services.AddScoped<IManufacturerKafkaProducer, ManufacturerKafkaProducer>();
+
+var consumerConfig = new ConsumerConfig
+{
+    BootstrapServers = "kafka:29092",
+    GroupId = "manufacturer-group-id",
+    AutoOffsetReset = AutoOffsetReset.Earliest
+};
+builder.Services.AddSingleton(consumerConfig);
+
+builder.Services.AddSingleton<AddPartyKafkaConsumer>();
+builder.Services.AddHostedService(provider => provider.GetRequiredService<AddPartyKafkaConsumer>());
+
+builder.Services.AddSingleton<UpdatePartyKafkaConsumer>();
+builder.Services.AddHostedService(provider => provider.GetRequiredService<UpdatePartyKafkaConsumer>());
+
+builder.Services.AddSingleton<DeletePartyKafkaConsumer>();
+builder.Services.AddHostedService(provider => provider.GetRequiredService<DeletePartyKafkaConsumer>());
 
 var app = builder.Build();
 
