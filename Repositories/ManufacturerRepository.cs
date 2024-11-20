@@ -75,6 +75,16 @@ namespace Gvz.Laboratory.ManufacturerService.Repositories
 
         public async Task<Guid> UpdateManufacturerAsync(ManufacturerModel manufacturer)
         {
+            var existingManufacturer = await _context.Manufacturers.FirstOrDefaultAsync(m => m.Id == manufacturer.Id)
+                ?? throw new RepositoryException("Производитель не найден.");
+
+            var existingManufacturerName = await _context.Manufacturers
+                .FirstOrDefaultAsync(m => (m.ManufacturerName == manufacturer.ManufacturerName) && (m.ManufacturerName != existingManufacturer.ManufacturerName));
+            if(existingManufacturerName != null)
+            {
+                throw new RepositoryException("Производитель с таким именем уже существует.");
+            }
+
             await _context.Manufacturers
                 .Where(m => m.Id == manufacturer.Id)
                 .ExecuteUpdateAsync(m => m
