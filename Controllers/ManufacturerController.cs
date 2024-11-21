@@ -50,6 +50,17 @@ namespace Gvz.Laboratory.ManufacturerService.Controllers
             return Ok(responseWrapper);
         }
 
+        [HttpGet]
+        [Route("ExportManufacturersToExcel")]
+        //[Authorize]
+        public async Task<ActionResult> ExportManufacturersToExcelAsync()
+        {
+            var stream = await _manufacturerService.ExportManufacturersToExcelAsync();
+            var fileName = "Manufacturers.xlsx";
+
+            return File(stream, "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet", fileName);
+        }
+
         [HttpPut("{id:guid}")]
         [Authorize(Roles = "Admin,Manager,Worker")]
         public async Task<ActionResult> UpdateManufacturerAsync(Guid id, [FromBody] UpdateManufacturerRequest updateManufacturerRequest)

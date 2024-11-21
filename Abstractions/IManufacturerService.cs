@@ -8,6 +8,7 @@ namespace Gvz.Laboratory.ManufacturerService.Abstractions
         Task DeleteManufacturersAsync(List<Guid> ids);
         Task<List<ManufacturerModel>> GetManufacturersAsync();
         Task<(List<ManufacturerModel> manufacturers, int numberManufacturers)> GetManufacturersForPageAsync(int pageNumber);
+        Task<MemoryStream> ExportManufacturersToExcelAsync();
         Task<Guid> UpdateManufacturerAsync(Guid id, string manufacturerName);
     }
 }

@@ -2,6 +2,7 @@
 using Gvz.Laboratory.ManufacturerService.Dto;
 using Gvz.Laboratory.ManufacturerService.Exceptions;
 using Gvz.Laboratory.ManufacturerService.Models;
+using OfficeOpenXml;
 
 namespace Gvz.Laboratory.ManufacturerService.Services
 {
@@ -45,6 +46,33 @@ namespace Gvz.Laboratory.ManufacturerService.Services
         public async Task<(List<ManufacturerModel> manufacturers, int numberManufacturers)> GetManufacturersForPageAsync(int pageNumber)
         {
             return await _manufacturerRepository.GetManufacturersForPageAsync(pageNumber);
+        }
+
+        public async Task<MemoryStream> ExportManufacturersToExcelAsync()
+        {
+            var manufacturers = await _manufacturerRepository.GetManufacturersAsync();
+
+            using (var package = new ExcelPackage())
+            {
+                var worksheet = package.Workbook.Worksheets.Add("Manufacturers");
+
+                worksheet.Cells[1, 1].Value = "Id";
+                worksheet.Cells[1, 2].Value = "Название";
+
+                for (int i = 0; i < manufacturers.Count; i++)
+                {
+                    worksheet.Cells[i + 2, 1].Value = manufacturers[i].Id;
+                    worksheet.Cells[i + 2, 2].Value = manufacturers[i].ManufacturerName;
+                }
+
+                worksheet.Cells.AutoFitColumns();
+
+                var stream = new MemoryStream();
+                await package.SaveAsAsync(stream);
+
+                stream.Position = 0; // Сбрасываем поток
+                return stream; 
+            }
         }
 
         public async Task<Guid> UpdateManufacturerAsync(Guid id, string manufacturerName)
