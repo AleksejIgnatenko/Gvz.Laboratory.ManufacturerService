@@ -48,6 +48,11 @@ namespace Gvz.Laboratory.ManufacturerService.Services
             return await _manufacturerRepository.GetManufacturersForPageAsync(pageNumber);
         }
 
+        public async Task<(List<ManufacturerModel> manufacturers, int numberManufacturers)> SearchManufacturersAsync(string searchQuery, int pageNumber)
+        {
+            return await _manufacturerRepository.SearchManufacturersAsync(searchQuery, pageNumber);
+        }
+
         public async Task<MemoryStream> ExportManufacturersToExcelAsync()
         {
             var manufacturers = await _manufacturerRepository.GetManufacturersAsync();

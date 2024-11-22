@@ -63,7 +63,31 @@ namespace Gvz.Laboratory.ManufacturerService.Repositories
                 .Take(20)
                 .ToListAsync();
 
-            var numberManufacturers = await _context.Manufacturers.CountAsync();
+            var numberManufacturers = await _context.Manufacturers
+                .AsNoTracking()
+                .CountAsync();
+
+            var manufacturers = manufacturerEntities.Select(m => ManufacturerModel.Create(
+                m.Id,
+                m.ManufacturerName,
+                false).manufacturer).ToList();
+
+            return (manufacturers, numberManufacturers);
+        }
+
+        public async Task<(List<ManufacturerModel> manufacturers, int numberManufacturers)> SearchManufacturersAsync(string searchQuery, int pageNumber)
+        {
+            var manufacturerEntities = await _context.Manufacturers
+                    .AsNoTracking()
+                    .Where(m => m.ManufacturerName.ToLower().Contains(searchQuery.ToLower()))
+                    .OrderByDescending(m => m.DateCreate)
+                    .Skip(pageNumber * 20)
+                    .Take(20)
+                    .ToListAsync();
+
+            var numberManufacturers = await _context.Manufacturers
+                    .AsNoTracking()
+                    .CountAsync(m => m.ManufacturerName.ToLower().Contains(searchQuery.ToLower()));
 
             var manufacturers = manufacturerEntities.Select(m => ManufacturerModel.Create(
                 m.Id,
