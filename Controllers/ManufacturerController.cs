@@ -51,7 +51,7 @@ namespace Gvz.Laboratory.ManufacturerService.Controllers
         }
 
         [HttpGet]
-        [Route("ExportToExcel")]
+        [Route("exportManufacturersToExcel")]
         [Authorize]
         public async Task<ActionResult> ExportManufacturersToExcelAsync()
         {
