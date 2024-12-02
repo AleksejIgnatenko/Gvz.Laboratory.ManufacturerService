@@ -1,4 +1,5 @@
-﻿using Gvz.Laboratory.ManufacturerService.Entities;
+﻿using Gvz.Laboratory.ManufacturerService.ConfigurationsDb;
+using Gvz.Laboratory.ManufacturerService.Entities;
 using Microsoft.EntityFrameworkCore;
 
 namespace Gvz.Laboratory.ManufacturerService
@@ -15,7 +16,7 @@ namespace Gvz.Laboratory.ManufacturerService
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
-            //configuration db
+            modelBuilder.ApplyConfiguration(new ManufacturerConfiguration());
         }
     }
 }
