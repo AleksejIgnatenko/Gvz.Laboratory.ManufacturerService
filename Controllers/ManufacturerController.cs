@@ -26,8 +26,8 @@ namespace Gvz.Laboratory.ManufacturerService.Controllers
         }
 
         [HttpGet]
-        [Authorize]
         [Route("getManufacturersAsync")]
+        [Authorize]
         public async Task<ActionResult> GetManufacturersAsync()
         {
             var manufacturers = await _manufacturerService.GetManufacturersAsync();

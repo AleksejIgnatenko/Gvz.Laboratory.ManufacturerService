@@ -18,8 +18,8 @@ namespace Gvz.Laboratory.ManufacturerService.Controllers
         }
 
         [HttpGet]
-        [Authorize]
         [Route("getManufacturerPartiesForPage")]
+        [Authorize]
         public async Task<ActionResult> GetManufacturerPartiesForPageAsync(Guid manufacturerId, int pageNumber)
         {
             var (parties, numberParties) = await _partyService.GetManufacturerPartiesForPageAsync(manufacturerId, pageNumber);
